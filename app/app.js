@@ -10,7 +10,7 @@ app.use(express.json());
 const mysqlConfig = {
     host: '127.0.0.1',
     user: 'root',
-    password: 'test123',
+    password: 'zalgiris',
     database: 'expenses_tracker',
     port: 3306
 };
