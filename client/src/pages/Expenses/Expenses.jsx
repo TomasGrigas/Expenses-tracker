@@ -17,7 +17,7 @@ const ExpensesListItem = styled.li`
     padding: 5px;
     color: white;
     background-color: grey;
-    
+    border-radius: 10px;
 `;
 
 
