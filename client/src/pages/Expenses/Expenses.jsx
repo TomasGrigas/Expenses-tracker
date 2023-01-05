@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { LOGGED_IN_USER } from "../../constants/constants";
-import { API_URL } from "../../constants/constants";
 import styled from 'styled-components'
 
 
@@ -26,8 +25,10 @@ export const Expenses = () => {
     const[expenses, setExpenses] = useState([]);
     const [isLoading,setIsLoading] = useState([]);
 
+    console.log(process.env)
+
         useEffect(()=>{
-            fetch(`${API_URL}/expenses?userId=${LOGGED_IN_USER.id}`)
+            fetch(`${process.env.REACT_APP_API_URL}/expenses?userId=${LOGGED_IN_USER.id}`)
             .then(res=>res.json())
             .then(data => {
                 setExpenses(data);
