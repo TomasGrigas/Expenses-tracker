@@ -1,6 +1,8 @@
 const cors = require('cors');
 const express = require('express');
 const mysql = require('mysql2');
+const bcrypt = require ('bcrypt');
+const e = require('cors');
 
 require('dotenv').config();
 
@@ -38,6 +40,60 @@ app.get('/expenses', (req, res) => {
         res.send(expenses);
     });
 });
+
+app.post('/expenses', (req, res) => {
+    const { type, amount, userId } = req.body;
+
+    connection.execute(
+        'INSERT INTO expenses (type, amount, userId) VALUES (?, ?, ?)',
+        [type, amount, userId],
+        () => {
+            connection.execute(
+                'SELECT * FROM expenses WHERE userId=?', 
+                [userId], 
+                (err, expenses) => {
+                    res.send(expenses);
+                }
+            )
+        }
+    )
+});
+
+app.post('/register', (req, res) => {
+    const {name, password} = req.body;
+    const hashedPassword = bcrypt.hashSync(password, 12);
+
+    connection.execute(
+        'INSERT INTO users (name, password) VALUES (?,?)',
+        [name, hashedPassword],
+        (err, result) => {
+            res.sendStatus(200);
+       }
+    )
+});
+
+app.post('/login', (req, res) => {
+    const {name, password} = req.body;
+
+    connection.execute(
+        'SELECT * FROM users WHERE name=?',
+        [name],
+        (err, result) => {
+           if(result.length === 0){
+                res.send('Incorrect username or password');
+           } else{
+                const passwordHash =result[0].password  
+                const  isPasswordCorrect = bcrypt.compareSync(password, passwordHash);
+                if(isPasswordCorrect){
+                    res.send("Successfully logged in!")
+                }else{
+                    res.send('Incorrect username or password')
+                }
+            }  
+       }
+    );
+});
+
 
 const PORT = 8080;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

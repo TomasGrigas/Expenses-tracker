@@ -24,6 +24,8 @@ const ExpensesListItem = styled.li`
 export const Expenses = () => {
     const[expenses, setExpenses] = useState([]);
     const [isLoading,setIsLoading] = useState([]);
+    const [type, setType] = useState("");
+    const [amount, setAmount] = useState("");
 
     console.log(process.env)
 
@@ -40,8 +42,48 @@ export const Expenses = () => {
             return <div>Loading...</div>
         }
 
+        const handleExpenseAdd = (e) => {
+            e.preventDefault();
+            fetch(`${process.env.REACT_APP_API_URL}/expenses`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    type, 
+                    amount,
+                    userId: 1
+                })
+            })
+            .then((res) => res.json())
+            .then((data) => {
+                setExpenses(data);
+                setType('');
+                setAmount('');
+            });
+        }
+    
+        const totalSum = expenses.reduce((totalSum, expense) => totalSum += parseInt(expense.amount), 0);
+
         return (
             <ExpensesList>
+                       <form onSubmit={handleExpenseAdd}>
+                <input 
+                    placeholder="Type" 
+                    required 
+                    onChange={(e) => setType(e.target.value)}
+                    value={type}
+                />
+                <input 
+                    placeholder="Amount" 
+                    type="number" 
+                    required 
+                    onChange={(e) => setAmount(e.target.value)}
+                    value={amount}
+                />
+                <button>Add</button>
+            </form>
+            <h2>Total spent: €{totalSum}</h2>
                 {expenses.map((exp) => (
                     <ExpensesListItem  key={exp.id}>
                         <span>{exp.type}</span>
