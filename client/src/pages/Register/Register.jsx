@@ -22,6 +22,11 @@ const FormStyled = styled(Form)`
     padding: 20px;
     width: 400px;
 `;
+const ErrorStyled = styled.div`
+    color:red;
+    text-aling:center;
+`;
+
 
 export const Register = () => {
     const navigate = useNavigate();
@@ -77,7 +82,7 @@ export const Register = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     value={password}
                 />
-                {error && <div>{error}</div>}
+                {error && <ErrorStyled>{error}</ErrorStyled>}
                 <Button>Register</Button>
                 <LinkStyled to="/login">Login</LinkStyled>
             </FormStyled>
