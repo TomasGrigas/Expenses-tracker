@@ -1,5 +1,2 @@
-export const LOGGED_IN_USER ={
-    id: 1
-};
 
-export const API_URL = "http://localhost:8080";
+export const LOCAL_STORAGE_JWT_TOKEN_KEY = 'JWT_TOKEN';
