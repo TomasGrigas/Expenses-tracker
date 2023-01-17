@@ -78,9 +78,11 @@ export const Expenses = () => {
         })
         .then((res) => res.json())
         .then((data) => {
-            setExpenses(data);
-            setType('');
-            setAmount('');
+            if (!data.error) {
+                setExpenses(data);
+                setType('');
+                setAmount('');
+            }
         });
     }
 
